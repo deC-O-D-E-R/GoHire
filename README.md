@@ -80,8 +80,8 @@ GOHIRE/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/kshitijmainkar/gohire.git
-   cd gohire
+   git clone https://github.com/deC-O-D-E-R/GoHire.git
+   cd GoHire
    ```
 
 2. **Start all services**
@@ -272,4 +272,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Built by Kshitij Mainkar**
+**Built by Mohd Saif**
