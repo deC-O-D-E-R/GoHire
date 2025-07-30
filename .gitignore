@@ -1,0 +1,23 @@
+# Node modules
+frontend/node_modules/
+job-service/node_modules/
+
+# Build folders
+frontend/dist/
+frontend/build/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Spring Boot
+**/target/
+
+# IntelliJ / VS Code / IDE files
+.idea/
+.vscode/
+
+# Env files (optional, only if you use them)
+.env
