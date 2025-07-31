@@ -1,6 +1,7 @@
 services:
   - type: web
     name: gohire-frontend
+    buildContext: ./frontend
     env: docker
     plan: free
     dockerfilePath: ./frontend/Dockerfile
