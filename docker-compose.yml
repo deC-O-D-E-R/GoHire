@@ -6,6 +6,7 @@ services:
     container_name: gohire-auth-service
     ports:
       - "8080:8080"
+    restart: always
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb+srv://mohdsaif9990197398:saifatlas@cluster0.xr5no1u.mongodb.net/job-db?retryWrites=true&w=majority&appName=Cluster0
 
@@ -14,6 +15,7 @@ services:
     container_name: gohire-job-service
     ports:
       - "8083:8083"
+    restart: always
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb+srv://mohdsaif9990197398:saifatlas@cluster0.xr5no1u.mongodb.net/job-db?retryWrites=true&w=majority&appName=Cluster0
       - REDIS_HOST=redis
@@ -24,13 +26,14 @@ services:
     container_name: gohire-frontend
     ports:
       - "3000:80"
+    restart: always
     depends_on:
       - auth-service
       - job-service
 
-
   redis:
-      image: redis:7.2-alpine
-      container_name: gohire-redis
-      ports:
-        - "6379:6379"
+    image: redis:7.2-alpine
+    container_name: gohire-redis
+    ports:
+      - "6379:6379"
+    restart: always
