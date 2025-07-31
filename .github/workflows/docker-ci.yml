@@ -50,3 +50,7 @@ jobs:
 
       - name: Show container logs (for debugging)
         run: docker-compose logs --tail=50
+
+      - name: Build Frontend Docker Image
+        run: |
+          docker build -t gohire-frontend -f frontend/Dockerfile ./frontend
