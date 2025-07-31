@@ -23,22 +23,22 @@ services:
       - key: PORT
         value: 8080
 
-  - type: web
-    name: gohire-job-service
-    env: docker
-    plan: free
-    dockerfilePath: ./job-service/Dockerfile
-    buildCommand: ""
-    startCommand: ""
-    envVars:
-      - key: SPRING_DATA_MONGODB_URI
-        value: mongodb+srv://mohdsaif9990197398:saifatlas@cluster0.xr5no1u.mongodb.net/job-db?retryWrites=true&w=majority&appName=Cluster0
-      - key: REDIS_HOST
-        value: gohire-redis
-      - key: REDIS_PORT
-        value: "6379"
-      - key: PORT
-        value: 8083
+  # - type: web
+  #   name: gohire-job-service
+  #   env: docker
+  #   plan: free
+  #   dockerfilePath: ./job-service/Dockerfile
+  #   buildCommand: ""
+  #   startCommand: ""
+  #   envVars:
+  #     - key: SPRING_DATA_MONGODB_URI
+  #       value: mongodb+srv://mohdsaif9990197398:saifatlas@cluster0.xr5no1u.mongodb.net/job-db?retryWrites=true&w=majority&appName=Cluster0
+  #     - key: REDIS_HOST
+  #       value: gohire-redis
+  #     - key: REDIS_PORT
+  #       value: "6379"
+  #     - key: PORT
+  #       value: 8083
 
   - type: redis
     name: gohire-redis
