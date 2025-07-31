@@ -34,7 +34,7 @@ services:
       - key: SPRING_DATA_MONGODB_URI
         value: mongodb+srv://mohdsaif9990197398:saifatlas@cluster0.xr5no1u.mongodb.net/job-db?retryWrites=true&w=majority&appName=Cluster0
       - key: REDIS_HOST
-        value: redis
+        value: gohire-redis
       - key: REDIS_PORT
         value: "6379"
       - key: PORT
@@ -43,3 +43,6 @@ services:
   - type: redis
     name: gohire-redis
     plan: free
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: Allow all for development
