@@ -21,17 +21,25 @@ function Login() {
         }
       });
 
-      if (res.data.startsWith("Bearer ")) {
-        localStorage.setItem("token", res.data.replace("Bearer ", ""));
+      const { token, userId, email } = res.data;
+      console.log("Full response object:", res);
+      console.log("Token: ", token);
+      console.log("UserId: ", userId);
+      console.log("Email:", email);
+      if (token && token.startsWith("Bearer ")) {
+        localStorage.setItem("token", token.replace("Bearer ", ""));
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("email", email);
         navigate("/");
       } else {
-        setError(res.data);
+        setError("Invalid token format.");
       }
     } catch (err) {
       console.error(err);
       setError("Login failed. Try again.");
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">

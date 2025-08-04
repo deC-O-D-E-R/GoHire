@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.job.auth.util.JwtUtil;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
+import java.util.HashMap;
 
 // import org.springframework.data.redis.core.RedisTemplate;
 // import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,7 +48,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody User user) {
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
         // String redisKey = "user:auth:" + user.getEmail();
         // User cachedUser = null;
 
@@ -60,18 +64,27 @@ public class AuthController {
         // if (cachedUser == null) {
         User cachedUser = userRepository.findByEmail(user.getEmail());
         //     if (cachedUser == null) {
-        //         return "User not found";
+        //         return ResponseEntity.status(401).body("User not found");
         //     }
 
         //     redisTemplate.opsForValue().set(redisKey, cachedUser, 1, TimeUnit.HOURS);
         // }
 
+        if (cachedUser == null) {
+            return ResponseEntity.status(401).body("User not found");
+        }
+
         if (!passwordEncoder.matches(user.getPassword(), cachedUser.getPassword())) {
-            return "Incorrect password";
+            return ResponseEntity.status(401).body("Incorrect password");
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
-        return "Bearer " + token;
-    }
 
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", "Bearer " + token);
+        response.put("userId", cachedUser.getId());
+        response.put("email", cachedUser.getEmail());
+
+        return ResponseEntity.ok(response);
+    }
 }
