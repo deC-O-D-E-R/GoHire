@@ -23,7 +23,10 @@ public class ProfileController {
     private ResumeRepository resumeRepository;
 
     @GetMapping("/me")
-    public ResponseEntity<?> getProfile(@AuthenticationPrincipal User user) {
+    public ResponseEntity<?> getProfile(@AuthenticationPrincipal User authUser) {
+        User user = userRepository.findById(authUser.getId()).orElse(null);
+        if (user == null) return ResponseEntity.badRequest().body("User not found");
+
         List<Resume> resumes = resumeRepository.findByUserId(user.getId());
 
         ProfileResponse profile = new ProfileResponse(
