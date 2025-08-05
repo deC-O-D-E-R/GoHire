@@ -4,6 +4,7 @@ services:
     env: docker
     plan: free
     dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
     buildCommand: ""
     startCommand: ""
     envVars:
@@ -15,6 +16,7 @@ services:
     env: docker
     plan: free
     dockerfilePath: ./auth-service/Dockerfile
+    dockerContext: ./auth-service
     buildCommand: ""
     startCommand: ""
     envVars:
@@ -44,6 +46,7 @@ services:
     env: docker
     plan: free
     dockerfilePath: ./ml-service/Dockerfile
+    dockerContext: ./ml-service
     buildCommand: ""
     startCommand: ""
     envVars:
