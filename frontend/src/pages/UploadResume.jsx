@@ -47,7 +47,7 @@ function UploadResume() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/ml/api/parse-resume",
+        `${process.env.REACT_APP_ML_URL}/ml/api/parse-resume`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       )
