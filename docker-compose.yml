@@ -32,6 +32,7 @@ services:
     depends_on:
       - auth-service
       - job-service
+      - ml-service
 
   redis:
     image: redis:7.2-alpine
@@ -39,3 +40,12 @@ services:
     ports:
       - "6379:6379"
     restart: always
+
+  ml-service:
+    build: ./ml-service
+    container_name: gohire-ml-service
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - redis

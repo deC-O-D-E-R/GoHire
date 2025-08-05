@@ -21,3 +21,8 @@ frontend/build/
 
 # Env files (optional, only if you use them)
 .env
+
+# ml-service specific ignores
+ml-service/__pycache__/
+ml-service/app/__pycache__/
+ml-service/venv/
