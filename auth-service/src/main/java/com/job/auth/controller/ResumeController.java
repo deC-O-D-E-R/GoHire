@@ -1,6 +1,9 @@
 package com.job.auth.controller;
 
+import org.springframework.http.HttpStatus;
 import com.job.auth.model.Resume;
+import com.job.auth.model.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.job.auth.repository.ResumeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -44,4 +47,17 @@ public class ResumeController {
 
         return ResponseEntity.ok("Resume uploaded successfully");
     }
+
+    @GetMapping("/download/{resumeId}")
+    public ResponseEntity<byte[]> downloadResume(@PathVariable String resumeId, 
+                                                @AuthenticationPrincipal User authUser) {
+        return resumeRepository.findByResumeIdAndUserId(resumeId, authUser.getId())
+                .map(resume -> ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(resume.getContentType()))
+                        .header("Content-Disposition", "attachment; filename=\"" + resume.getFileName() + "\"")
+                        .body(resume.getFileData()))
+                .orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
+    }
+
+
 }
