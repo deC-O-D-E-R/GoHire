@@ -6,7 +6,7 @@ function UploadResume() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [message, setMessage] = useState("")
   const [resumeUploaded, setResumeUploaded] = useState(false)
-  const [parsedText, setParsedText] = useState("")
+  const [recommendations, setRecommendations] = useState([])
 
   const handleUpload = async () => {
     if (!selectedFile) {
@@ -36,7 +36,7 @@ function UploadResume() {
     }
   }
 
-  const handleParse = async () => {
+  const handleRecommend = async () => {
     if (!selectedFile) {
       setMessage("Please select a resume first.")
       return
@@ -47,23 +47,16 @@ function UploadResume() {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_ML_URL}/ml/api/parse-resume`,
+        `${process.env.REACT_APP_ML_URL}/ml/api/recommend`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       )
 
-      setParsedText(response.data.parsed_text)
-      setMessage("Resume parsed successfully.")
+      setRecommendations(response.data.recommendations || [])
+      setMessage("Jobs recommended successfully.")
     } catch (error) {
-      console.error("Parse Error:", error.response || error)
-      setMessage("Failed to parse resume.")
-    }
-  }
-
-  const handleCopy = () => {
-    if (parsedText) {
-      navigator.clipboard.writeText(parsedText)
-      setMessage("Parsed text copied to clipboard!")
+      console.error("Recommend Error:", error.response || error)
+      setMessage("Failed to fetch recommendations.")
     }
   }
 
@@ -73,12 +66,14 @@ function UploadResume() {
         Upload Your Resume
       </h1>
 
-      <ResumeDropzone onFileSelect={(file) => {
-        setSelectedFile(file)
-        setMessage("")
-        setResumeUploaded(false)
-        setParsedText("")
-      }} />
+      <ResumeDropzone
+        onFileSelect={(file) => {
+          setSelectedFile(file)
+          setMessage("")
+          setResumeUploaded(false)
+          setRecommendations([])
+        }}
+      />
 
       {selectedFile && (
         <p className="text-gray-700 mb-4">{selectedFile.name}</p>
@@ -95,22 +90,39 @@ function UploadResume() {
 
       {resumeUploaded && (
         <button
-          onClick={handleParse}
+          onClick={handleRecommend}
           className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl text-base md:text-lg mt-4 transition shadow-md"
         >
-          Parse Resume
+          Get Job Recommendations
         </button>
       )}
 
-      {parsedText && (
-        <div className="relative w-full max-w-2xl bg-gray-100 text-left p-4 rounded-xl shadow-md mt-8">
-          <button
-            onClick={handleCopy}
-            className="absolute top-2 right-2 text-xs bg-primary hover:bg-accent text-white px-3 py-1 rounded transition"
-          >
-            Copy
-          </button>
-          <pre className="whitespace-pre-wrap text-gray-800">{parsedText}</pre>
+      {recommendations.length > 0 && (
+        <div className="mt-10 w-full max-w-5xl overflow-x-auto">
+          <table className="min-w-full border border-gray-200 rounded-xl shadow-md bg-white">
+            <thead className="bg-primary text-white">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold">Title</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">Company</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">Location</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {recommendations.map((job, idx) => (
+                <tr key={idx} className="hover:bg-gray-50 transition">
+                  <td className="px-6 py-4 text-sm font-medium text-primary">
+                    {job.title}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">{job.company}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{job.location}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700 max-w-xs">
+                    <div className="line-clamp-3">{job.description}</div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 

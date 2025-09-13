@@ -4,3 +4,8 @@ python-multipart
 pdfminer.six
 docx2txt
 requests
+sentence-transformers
+faiss-cpu
+joblib
+numpy
+pandas

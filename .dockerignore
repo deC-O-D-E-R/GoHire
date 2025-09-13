@@ -1,0 +1,22 @@
+# Node
+**/node_modules/
+**/build/
+**/dist/
+
+# Java / Spring
+**/target/
+
+# Python
+**/__pycache__/
+**/venv/
+
+# Logs
+*.log
+
+# IDEs / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Git
+.git

@@ -5,9 +5,7 @@ from app.recommender import recommend_jobs
 
 router = APIRouter()
 
-class RecommendationRequest(BaseModel):
-    parsed_text: str
-
+# You can keep this route if you want to support direct file parsing as well
 @router.post("/parse-resume")
 async def parse_resume_route(file: UploadFile = File(...)):
     contents = await file.read()
@@ -17,7 +15,18 @@ async def parse_resume_route(file: UploadFile = File(...)):
         "parsed_by": result["method"]
     }
 
+
 @router.post("/recommend")
-async def recommend_route(request: RecommendationRequest):
-    recommendations = recommend_jobs(request.parsed_text)
+async def recommend_from_file_route(file: UploadFile = File(...)):
+    # Read the file content
+    contents = await file.read()
+
+    # Step 1: Parse the file to get the resume text
+    parsed_result = parse_resume(contents, file.filename)
+    parsed_text = parsed_result["text"]
+
+    # Step 2: Use the parsed text to get job recommendations
+    recommendations = recommend_jobs(parsed_text)
+
+    # Return the recommendations
     return {"recommendations": recommendations}
